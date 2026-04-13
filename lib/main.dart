@@ -19,11 +19,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool isDarkMode = false;
+  bool _isDarkMode = false;
 
-  void toggleTheme() {
+  void _toggleTheme() {
     setState(() {
-      isDarkMode = !isDarkMode;
+      _isDarkMode = !_isDarkMode;
     });
   }
 
@@ -32,15 +32,21 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Task Manager',
       debugShowCheckedModeBanner: false,
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.deepOrange,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF8F5F1),
+      ),
       darkTheme: ThemeData(
         useMaterial3: true,
+        colorSchemeSeed: Colors.deepOrange,
         brightness: Brightness.dark,
       ),
       home: TaskListScreen(
-        isDarkMode: isDarkMode,
-        onToggleTheme: toggleTheme,
+        isDarkMode: _isDarkMode,
+        onToggleTheme: _toggleTheme,
       ),
     );
   }
