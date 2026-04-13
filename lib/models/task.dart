@@ -13,14 +13,12 @@ class Task {
     required this.createdAt,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'title': title,
-      'isCompleted': isCompleted,
-      'subtasks': subtasks,
-      'createdAt': createdAt.toIso8601String(),
-    };
-  }
+  Map<String, dynamic> toMap() => {
+        'title': title,
+        'isCompleted': isCompleted,
+        'subtasks': subtasks,
+        'createdAt': createdAt.toIso8601String(),
+      };
 
   factory Task.fromMap(String id, Map<String, dynamic> data) {
     return Task(
@@ -29,21 +27,6 @@ class Task {
       isCompleted: data['isCompleted'] ?? false,
       subtasks: List<Map<String, dynamic>>.from(data['subtasks'] ?? []),
       createdAt: DateTime.tryParse(data['createdAt'] ?? '') ?? DateTime.now(),
-    );
-  }
-
-  Task copyWith({
-    String? title,
-    bool? isCompleted,
-    List<Map<String, dynamic>>? subtasks,
-    DateTime? createdAt,
-  }) {
-    return Task(
-      id: id,
-      title: title ?? this.title,
-      isCompleted: isCompleted ?? this.isCompleted,
-      subtasks: subtasks ?? this.subtasks,
-      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/task_list_screen.dart';
 
@@ -19,34 +19,29 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isDarkMode = false;
+  bool isDarkMode = false;
 
-  void _toggleTheme() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
+  void toggleTheme() {
+    setState(() => isDarkMode = !isDarkMode);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Task Manager',
       debugShowCheckedModeBanner: false,
-      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      title: 'Task Manager',
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.deepOrange,
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFF8F5F1),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.deepOrange,
         brightness: Brightness.dark,
       ),
       home: TaskListScreen(
-        isDarkMode: _isDarkMode,
-        onToggleTheme: _toggleTheme,
+        isDarkMode: isDarkMode,
+        onToggleTheme: toggleTheme,
       ),
     );
   }
