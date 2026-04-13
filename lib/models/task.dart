@@ -31,4 +31,19 @@ class Task {
       createdAt: DateTime.tryParse(data['createdAt'] ?? '') ?? DateTime.now(),
     );
   }
+
+  Task copyWith({
+    String? title,
+    bool? isCompleted,
+    List<Map<String, dynamic>>? subtasks,
+    DateTime? createdAt,
+  }) {
+    return Task(
+      id: id,
+      title: title ?? this.title,
+      isCompleted: isCompleted ?? this.isCompleted,
+      subtasks: subtasks ?? this.subtasks,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
