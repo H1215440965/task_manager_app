@@ -25,22 +25,36 @@ class _TaskCardState extends State<TaskCard> {
       direction: DismissDirection.endToStart,
       onDismissed: (_) => widget.service.deleteTask(t.id),
       background: Container(
-        color: Colors.red,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(16),
+        ),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         child: const Icon(Icons.delete, color: Colors.white),
       ),
+
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.orange.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          color: Theme.of(context).cardColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
+
         child: Column(
           children: [
             ListTile(
+              contentPadding: EdgeInsets.zero,
               leading: Checkbox(
                 value: t.isCompleted,
                 onChanged: (_) => widget.service.toggleTask(t),
@@ -49,6 +63,7 @@ class _TaskCardState extends State<TaskCard> {
                 t.title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontSize: 16,
                   decoration:
                       t.isCompleted ? TextDecoration.lineThrough : null,
                 ),
@@ -62,14 +77,30 @@ class _TaskCardState extends State<TaskCard> {
               ),
             ),
 
-            // 🔽 SUBTASKS
+            // 🔽 SUBTASK SECTION
             if (expanded) ...[
+              const Divider(),
+
               Row(
                 children: [
-                  Expanded(child: TextField(controller: subController)),
+                  Expanded(
+                    child: TextField(
+                      controller: subController,
+                      decoration: InputDecoration(
+                        hintText: "Add subtask...",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () async {
+                      if (subController.text.trim().isEmpty) return;
                       await widget.service
                           .addSubtask(t, subController.text);
                       subController.clear();
@@ -77,11 +108,15 @@ class _TaskCardState extends State<TaskCard> {
                   )
                 ],
               ),
+
+              const SizedBox(height: 8),
+
               ...t.subtasks.asMap().entries.map((entry) {
                 int i = entry.key;
                 var sub = entry.value;
 
                 return ListTile(
+                  contentPadding: EdgeInsets.zero,
                   leading: Checkbox(
                     value: sub['isDone'] ?? false,
                     onChanged: (_) =>

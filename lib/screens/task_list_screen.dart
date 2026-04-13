@@ -20,9 +20,11 @@ class TaskListScreen extends StatefulWidget {
 class _TaskListScreenState extends State<TaskListScreen> {
   final TaskService service = TaskService();
   final TextEditingController controller = TextEditingController();
+
   String search = '';
 
   void addTask() async {
+    if (controller.text.trim().isEmpty) return;
     await service.addTask(controller.text);
     controller.clear();
   }
@@ -31,7 +33,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Task Manager"),
+        title: const Text(
+          "Task Manager",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        elevation: 0,
         actions: [
           IconButton(
             icon: Icon(widget.isDarkMode ? Icons.light_mode : Icons.dark_mode),
@@ -39,18 +45,69 @@ class _TaskListScreenState extends State<TaskListScreen> {
           )
         ],
       ),
+
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(child: TextField(controller: controller)),
-              ElevatedButton(onPressed: addTask, child: const Text("Add"))
-            ],
+          // 🔥 ADD TASK INPUT
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: "Add a new task...",
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: addTask,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text("Add"),
+                )
+              ],
+            ),
           ),
-          TextField(
-            onChanged: (value) => setState(() => search = value),
-            decoration: const InputDecoration(hintText: "Search"),
+
+          // 🔍 SEARCH
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              onChanged: (value) => setState(() => search = value),
+              decoration: InputDecoration(
+                hintText: "Search tasks...",
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
           ),
+
+          const SizedBox(height: 10),
+
+          // 📡 LIST
           Expanded(
             child: StreamBuilder<List<Task>>(
               stream: service.streamTasks(),
@@ -65,7 +122,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     .toList();
 
                 if (tasks.isEmpty) {
-                  return const Center(child: Text("No tasks"));
+                  return const Center(child: Text("No tasks yet"));
                 }
 
                 return ListView(
