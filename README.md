@@ -1,12 +1,27 @@
 # task_manager_app
 
-A new Flutter project.
+This project is a Flutter Task Management App built with StatefulWidget, setState(), and Firebase Firestore. The app supports full CRUD operations for tasks in real time and includes nested subtasks for better task organization.
 
-## Features
-- Add / delete / complete tasks
-- Firebase real-time sync
-- Search
-- Dark mode
+
+## Main Features
+- Create tasks
+- Read tasks from Firestore in real time
+- Update task completion status
+- Edit task title
+- Delete tasks with swipe-to-delete
+- Add nested subtasks
+- Edit subtasks
+- Toggle subtask completion
+- Delete subtasks
+- Search tasks
+- Dark mode toggle
+- Loading, empty, error, and validation states
+
+## Technologies Used
+- Flutter
+- Dart
+- Firebase Core
+- Cloud Firestore
 
 ## Tech
 - Flutter
